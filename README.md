@@ -29,13 +29,12 @@
 ## Overview
  
 Humans routinely transform local, viewpoint-dependent observations into shared spatial models through language. COSMIC asks whether MLLMs can do the same. The benchmark places two static agents in the same indoor scene from different egocentric viewpoints. The agents must communicate exclusively through natural language to jointly solve a spatial QA task.
- 
- 
-## Benchmark
 
 <p align="center">
-  <img src="assets/cosmic_bench.png" alt="COSMIC Logo" width="1200"/>
+  <img src="assets/comm_about_space.png" alt="comm_about_space" width="1200"/>
 </p>
+ 
+## Benchmark
  
 ### Tasks
  
@@ -50,6 +49,10 @@ COSMIC contains **899 indoor scenes** and **1,250 question–answer pairs** span
 | **Cognitive Mapping** | Communicate complementary partial observations to build a shared map-like representation of the room, verifying whether a proposed top-down layout is spatially accurate |
  
 All tasks use multiple-choice format (4 options, except Cognitive Mapping which is binary) with carefully constructed distractors.
+
+<p align="center">
+  <img src="assets/cosmic_bench.png" alt="bench" width="1200"/>
+</p>
 
  
 ## Code
