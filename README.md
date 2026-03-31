@@ -32,6 +32,10 @@ Humans routinely transform local, viewpoint-dependent observations into shared s
  
  
 ## Benchmark
+
+<p align="center">
+  <img src="assets/cosmic_bench.png" alt="COSMIC Logo" width="1200"/>
+</p>
  
 ### Tasks
  
