@@ -95,7 +95,7 @@ The pipeline runs the following stages in sequence. Each stage is optional and c
 
 ### Scene Generation
 
-The 3D indoor scenes used as input to this pipeline are generated using a modified version of Infinigen, available at [ankursikarwar/infinigen-cosmic](https://github.com/ankursikarwar/infinigen-cosmic). Refer to that repository for instructions on generating scenes.
+The 3D indoor scenes used as input to this pipeline are generated using a modified version of Infinigen, available at [ankursikarwar/infinigen (cosmic branch)](https://github.com/ankursikarwar/infinigen/tree/cosmic). Refer to that repository for instructions on generating scenes.
 
 ### Blender
 
