@@ -108,7 +108,7 @@ class DatagenPipeline:
         self.blender_executable = str(local_blender) if local_blender.exists() else shutil.which("blender")
         self.get_object_info_script = self.question_generation_dir / "get_object_info.py"
         self.get_camera_info_script = self.question_generation_dir / "get_camera_info.py"
-        self.get_blender_color_info_script = self.question_generation_dir / "get_blender_color_v2.py"
+        self.get_blender_color_info_script = self.question_generation_dir / "get_blender_color.py"
         self.llm_visible_objects_script = self.question_generation_dir / "llm_visible_objects.py"
         self.bound_objects_script = self.question_generation_dir / "bound_objects.py"
         self.obj_color_info_script = self.question_generation_dir / "get_color_info.py"
@@ -1151,26 +1151,26 @@ class DatagenPipeline:
 
                 self.failed_scenes[scene] = error
 
-        logger.info(f"Saving dataset_global_counting to {DATA_DIR / f'dataset_global_counting_{self.question_version}.json'}")
-        json.dump(dataset_global_counting, open(str(DATA_DIR / f"dataset_global_counting_{self.question_version}.json"), "w"), indent=4)
-        logger.info(f"Saving dataset_anchor_recognition to {DATA_DIR / f'dataset_anchor_recognition_{self.question_version}.json'}")
-        json.dump(dataset_anchor_recognition, open(str(DATA_DIR / f"dataset_anchor_recognition_{self.question_version}.json"), "w"), indent=4)
-        logger.info(f"Saving dataset_relative_distance to {DATA_DIR / f'dataset_relative_distance_{self.question_version}.json'}")
-        json.dump(dataset_relative_distance, open(str(DATA_DIR / f"dataset_relative_distance_{self.question_version}.json"), "w"), indent=4)
-        logger.info(f"Saving dataset_relative_direction to {DATA_DIR / f'dataset_relative_direction_{self.question_version}.json'}")
-        json.dump(dataset_relative_direction, open(str(DATA_DIR / f"dataset_relative_direction_{self.question_version}.json"), "w"), indent=4)
+        logger.info(f"Saving dataset_global_counting to {DATA_DIR / f'dataset_global_counting.json'}")
+        json.dump(dataset_global_counting, open(str(DATA_DIR / f"dataset_global_counting.json"), "w"), indent=4)
+        logger.info(f"Saving dataset_anchor_recognition to {DATA_DIR / f'dataset_anchor_recognition.json'}")
+        json.dump(dataset_anchor_recognition, open(str(DATA_DIR / f"dataset_anchor_recognition.json"), "w"), indent=4)
+        logger.info(f"Saving dataset_relative_distance to {DATA_DIR / f'dataset_relative_distance.json'}")
+        json.dump(dataset_relative_distance, open(str(DATA_DIR / f"dataset_relative_distance.json"), "w"), indent=4)
+        logger.info(f"Saving dataset_relative_direction to {DATA_DIR / f'dataset_relative_direction.json'}")
+        json.dump(dataset_relative_direction, open(str(DATA_DIR / f"dataset_relative_direction.json"), "w"), indent=4)
 
     def question_filtering(self):
-        with open(str(DATA_DIR / f"dataset_global_counting_{self.question_version}.json"), "r") as f:
+        with open(str(DATA_DIR / f"dataset_global_counting.json"), "r") as f:
             counting_questions = json.load(f)
 
-        with open(str(DATA_DIR / f"dataset_anchor_recognition_{self.question_version}.json"), "r") as f:
+        with open(str(DATA_DIR / f"dataset_anchor_recognition.json"), "r") as f:
             anchor_questions = json.load(f)
 
-        with open(str(DATA_DIR / f"dataset_relative_distance_{self.question_version}.json"), "r") as f:
+        with open(str(DATA_DIR / f"dataset_relative_distance.json"), "r") as f:
             relative_distance_questions = json.load(f)
 
-        with open(str(DATA_DIR / f"dataset_relative_direction_{self.question_version}.json"), "r") as f:
+        with open(str(DATA_DIR / f"dataset_relative_direction.json"), "r") as f:
             spatial_questions = json.load(f)
 
         filtered_counting_questions = []
@@ -1221,10 +1221,10 @@ class DatagenPipeline:
             else:
                 filtered_relative_distance_questions.append(question)
 
-        json.dump(filtered_counting_questions, open(str(DATA_DIR / f"dataset_global_counting_filtered_{self.question_version}.json"), "w"), indent=4)
-        json.dump(filtered_anchor_questions, open(str(DATA_DIR / f"dataset_anchor_recognition_filtered_{self.question_version}.json"), "w"), indent=4)
-        json.dump(filtered_relative_distance_questions, open(str(DATA_DIR / f"dataset_relative_distance_filtered_{self.question_version}.json"), "w"), indent=4)
-        json.dump(filtered_spatial_questions, open(str(DATA_DIR / f"dataset_relative_direction_filtered_{self.question_version}.json"), "w"), indent=4)
+        json.dump(filtered_counting_questions, open(str(DATA_DIR / f"dataset_global_counting_filtered.json"), "w"), indent=4)
+        json.dump(filtered_anchor_questions, open(str(DATA_DIR / f"dataset_anchor_recognition_filtered.json"), "w"), indent=4)
+        json.dump(filtered_relative_distance_questions, open(str(DATA_DIR / f"dataset_relative_distance_filtered.json"), "w"), indent=4)
+        json.dump(filtered_spatial_questions, open(str(DATA_DIR / f"dataset_relative_direction_filtered.json"), "w"), indent=4)
 
 
     def aggregate_cognitive_mapping(self, scenes: List[Path]):
@@ -1246,7 +1246,7 @@ class DatagenPipeline:
                 logger.error(f"Error aggregating cognitive mapping for scene {scene}: {e}")
                 continue
 
-        output_path = str(DATA_DIR / f"dataset_cognitive_mapping_{self.question_version}.json")
+        output_path = str(DATA_DIR / f"dataset_cognitive_mapping.json")
         logger.info(f"Saving dataset_cognitive_mapping to {output_path}")
         json.dump(dataset_cognitive_mapping, open(output_path, "w"), indent=4)
         logger.info(f"Total cognitive mapping questions: {len(dataset_cognitive_mapping)}")

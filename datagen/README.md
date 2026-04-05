@@ -19,16 +19,16 @@ datagen/
 ├── scene_filtering.py                 # LLM-based scene quality filtering
 ├── data/                              # Output directory (auto-created)
 │   ├── dataset_scenes.json            # Registry of all processed scenes
-│   ├── dataset_global_counting_V1.json
-│   ├── dataset_anchor_recognition_V1.json
-│   ├── dataset_relative_distance_V1.json
-│   ├── dataset_relative_direction_V1.json
-│   ├── dataset_cognitive_mapping_V1.json
+│   ├── dataset_global_counting.json
+│   ├── dataset_anchor_recognition.json
+│   ├── dataset_relative_distance.json
+│   ├── dataset_relative_direction.json
+│   ├── dataset_cognitive_mapping.json
 │   └── datagen_pipeline.log
 └── question_generation/               # Per-scene processing scripts
     ├── get_object_info.py             # Blender: export visible objects + bboxes
     ├── get_camera_info.py             # Blender: export camera intrinsics/extrinsics
-    ├── get_blender_color_v2.py        # Blender: extract material colors
+    ├── get_blender_color.py        # Blender: extract material colors
     ├── llm_visible_objects.py         # VLM: detect visible objects in images
     ├── get_color_info.py              # VLM: detect dominant object colors
     ├── generate_descriptions.py       # Generate natural language object descriptions
@@ -189,7 +189,6 @@ python -m datagen.pipeline \
 | `--seed` | `42` | Random seed for scene sampling |
 | `--overwrite_files` | `False` | Re-run stages even if output files already exist |
 | `--dry_run` | `False` | Print commands without executing |
-| `--question_version` | `V1` | Version tag appended to output dataset filenames |
 | `--log_wandb` | `False` | Log pipeline run and stats to W&B |
 
 ### Model arguments
@@ -219,11 +218,11 @@ All aggregated dataset files are written to `datagen/data/`:
 
 | File | Task |
 |---|---|
-| `dataset_global_counting_V1.json` | Global Counting |
-| `dataset_anchor_recognition_V1.json` | Anchor Recognition |
-| `dataset_relative_distance_V1.json` | Relative Distance |
-| `dataset_relative_direction_V1.json` | Relative Direction |
-| `dataset_cognitive_mapping_V1.json` | Cognitive Mapping |
+| `dataset_global_counting.json` | Global Counting |
+| `dataset_anchor_recognition.json` | Anchor Recognition |
+| `dataset_relative_distance.json` | Relative Distance |
+| `dataset_relative_direction.json` | Relative Direction |
+| `dataset_cognitive_mapping.json` | Cognitive Mapping |
 | `dataset_scenes.json` | Registry of all scenes |
 | `datagen_pipeline.log` | Full pipeline log |
 
