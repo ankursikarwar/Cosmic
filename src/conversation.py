@@ -32,6 +32,7 @@ class TwoAgentConv:
         helper_api_base: str = "https://api.openai.com/v1",
         max_completion_tokens: int = 1000,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -58,6 +59,7 @@ class TwoAgentConv:
             api_base=answerer_api_base,
             max_completion_tokens=max_completion_tokens,
             temperature=temperature,
+            reasoning_effort=reasoning_effort,
             enable_logging=enable_logging
         )
         self.helper_agent = ConvAgent(
@@ -68,6 +70,7 @@ class TwoAgentConv:
             api_base=helper_api_base,
             max_completion_tokens=max_completion_tokens,
             temperature=temperature,
+            reasoning_effort=reasoning_effort,
             enable_logging=enable_logging
         )
 
@@ -371,7 +374,7 @@ class TwoAgentConv:
                 "messages": self.answerer_agent.chat_history,
                 "max_completion_tokens": self.answerer_agent.max_completion_tokens,
                 "temperature": self.answerer_agent.temperature,
-                "reasoning_effort": "high"
+                "reasoning_effort": self.answerer_agent.reasoning_effort
             }
         else:
             query = {
@@ -509,6 +512,7 @@ class SingleBothViews:
         api_base: str = "https://api.openai.com/v1",
         max_completion_tokens: int = 1000,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -522,6 +526,7 @@ class SingleBothViews:
             api_base=api_base,
             max_completion_tokens=max_completion_tokens,
             temperature=temperature,
+            reasoning_effort=reasoning_effort,
             enable_logging=enable_logging
         )
 
@@ -586,6 +591,7 @@ class SingleOneView:
         api_base: str = "https://api.openai.com/v1",
         max_completion_tokens: int = 1000,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -599,6 +605,7 @@ class SingleOneView:
             api_base=api_base,
             max_completion_tokens=max_completion_tokens,
             temperature=temperature,
+            reasoning_effort=reasoning_effort,
             enable_logging=enable_logging
         )
 
@@ -652,6 +659,7 @@ class SingleNoView:
         api_base: str = "https://api.openai.com/v1",
         max_completion_tokens: int = 1000,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -665,6 +673,7 @@ class SingleNoView:
             api_base=api_base,
             max_completion_tokens=max_completion_tokens,
             temperature=temperature,
+            reasoning_effort=reasoning_effort,
             enable_logging=enable_logging
         )
 

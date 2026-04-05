@@ -253,6 +253,7 @@ python main.py \
 | `--helper_api_base` | `http://localhost:4877/v1` | API base URL for the helper agent |
 | `--temperature` | `1.0` | Sampling temperature |
 | `--max_completion_tokens` | `8192` | Max tokens per model response |
+| `--reasoning_effort` | `high` | Reasoning effort for GPT and Gemini models (`low`, `medium`, `high`, `minimal`, `none`) |
 
  
 ## Citation

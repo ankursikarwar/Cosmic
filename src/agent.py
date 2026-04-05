@@ -20,6 +20,7 @@ class ConvAgent:
         api_base: str,
         max_completion_tokens: int,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -37,6 +38,7 @@ class ConvAgent:
         self.api_base = api_base
         self.max_completion_tokens = max_completion_tokens
         self.temperature = temperature
+        self.reasoning_effort = reasoning_effort
         self.enable_logging = enable_logging
 
         self.chat_history: List[Dict[str, Any]] = []
@@ -215,7 +217,7 @@ class ConvAgent:
                 "messages": self.chat_history,
                 "max_completion_tokens": self.max_completion_tokens,
                 "temperature": self.temperature,
-                "reasoning_effort": "high"
+                "reasoning_effort": self.reasoning_effort
             }
         else:
             query = {
@@ -252,7 +254,7 @@ class ConvAgent:
                 "messages": self.chat_history,
                 "max_completion_tokens": self.max_completion_tokens,
                 "temperature": self.temperature,
-                "reasoning_effort": "high"
+                "reasoning_effort": self.reasoning_effort
                 }]
         else:
             query = [{
@@ -334,7 +336,7 @@ class ConvAgent:
                 "messages": self.chat_history,
                 "max_completion_tokens": self.max_completion_tokens,
                 "temperature": self.temperature,
-                "reasoning_effort": "high"
+                "reasoning_effort": self.reasoning_effort
                 }]
         else:
             query = [{
@@ -561,6 +563,7 @@ class BothViewsAgent:
         api_base: str,
         max_completion_tokens: int,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -573,6 +576,7 @@ class BothViewsAgent:
         self.api_base = api_base
         self.max_completion_tokens = max_completion_tokens
         self.temperature = temperature
+        self.reasoning_effort = reasoning_effort
         self.enable_logging = enable_logging
 
         self.chat_history: List[Dict[str, Any]] = []
@@ -630,7 +634,7 @@ class BothViewsAgent:
             query = [{
                 "messages": self.chat_history,
                 "temperature": self.temperature,
-                "reasoning_effort": "high"
+                "reasoning_effort": self.reasoning_effort
             }]
         else:
             query = [{
@@ -800,6 +804,7 @@ class OneViewAgent:
         api_base: str,
         max_completion_tokens: int,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -811,6 +816,7 @@ class OneViewAgent:
         self.api_base = api_base
         self.max_completion_tokens = max_completion_tokens
         self.temperature = temperature
+        self.reasoning_effort = reasoning_effort
         self.enable_logging = enable_logging
 
         self.chat_history: List[Dict[str, Any]] = []
@@ -860,11 +866,18 @@ class OneViewAgent:
             {"role": "user", "content": content_no_image}
         ]
 
-        query = [{
-            "messages": self.chat_history,
-            "max_completion_tokens": self.max_completion_tokens,
-            "temperature": self.temperature
-        }]
+        if "gpt" in self.model_name or "gemini" in self.model_name:
+            query = [{
+                "messages": self.chat_history,
+                "temperature": self.temperature,
+                "reasoning_effort": self.reasoning_effort
+            }]
+        else:
+            query = [{
+                "messages": self.chat_history,
+                "max_completion_tokens": self.max_completion_tokens,
+                "temperature": self.temperature
+            }]
 
         response = ""
         if confidence:
@@ -987,6 +1000,7 @@ class NoViewAgent:
         api_base: str,
         max_completion_tokens: int,
         temperature: float = 1.0,
+        reasoning_effort: str = "high",
         enable_logging: bool = True,
     ):
 
@@ -997,6 +1011,7 @@ class NoViewAgent:
         self.api_base = api_base
         self.max_completion_tokens = max_completion_tokens
         self.temperature = temperature
+        self.reasoning_effort = reasoning_effort
         self.enable_logging = enable_logging
 
         self.chat_history: List[Dict[str, Any]] = []
@@ -1036,11 +1051,18 @@ class NoViewAgent:
             {"role": "user", "content": content_no_image}
         ]
 
-        query = [{
-            "messages": self.chat_history,
-            "max_completion_tokens": self.max_completion_tokens,
-            "temperature": self.temperature
-        }]
+        if "gpt" in self.model_name or "gemini" in self.model_name:
+            query = [{
+                "messages": self.chat_history,
+                "temperature": self.temperature,
+                "reasoning_effort": self.reasoning_effort
+            }]
+        else:
+            query = [{
+                "messages": self.chat_history,
+                "max_completion_tokens": self.max_completion_tokens,
+                "temperature": self.temperature
+            }]
 
         response = ""
         if confidence:

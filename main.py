@@ -127,6 +127,13 @@ def parse_arguments():
         help="Temperature"
     )
     parser.add_argument(
+        "--reasoning_effort",
+        type=str,
+        default="high",
+        choices=["low", "medium", "high", "minimal", "none"],
+        help="Reasoning effort for GPT and Gemini models"
+    )
+    parser.add_argument(
         "--bbox_tracking",
         action="store_true",
         help="BBOX tracking"
@@ -461,6 +468,7 @@ def run_two_agent_parallel(args, tasks_qa, task, use_map, sg_comm):
             helper_api_base=args.helper_api_base,
             max_completion_tokens=args.max_completion_tokens,
             temperature=args.temperature,
+            reasoning_effort=args.reasoning_effort,
             enable_logging=args.enable_logging,
         )
 
@@ -836,6 +844,7 @@ def run_single_agent_both_views(args, tasks_qa, task, use_map, sg_comm):
             api_base=args.single_agent_api_base,
             max_completion_tokens=args.max_completion_tokens,
             temperature=args.temperature,
+            reasoning_effort=args.reasoning_effort,
             enable_logging=args.enable_logging,
         )
 
@@ -1020,6 +1029,7 @@ def run_single_agent_one_view(args, tasks_qa, task, use_map, sg_comm):
             api_base=args.single_agent_api_base,
             max_completion_tokens=args.max_completion_tokens,
             temperature=args.temperature,
+            reasoning_effort=args.reasoning_effort,
             enable_logging=args.enable_logging,
         )
 
@@ -1189,6 +1199,7 @@ def run_single_agent_no_view(args, tasks_qa, task, use_map, sg_comm):
             api_base=args.single_agent_api_base,
             max_completion_tokens=args.max_completion_tokens,
             temperature=args.temperature,
+            reasoning_effort=args.reasoning_effort,
             enable_logging=args.enable_logging,
         )
 
