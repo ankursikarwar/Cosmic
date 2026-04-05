@@ -1,0 +1,36 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Data
+data/
+
+# Eval results
+eval_results/
+
+# W&B
+wandb/
+
+# Checkpoints
+checkpoint.json
+accuracy_checkpoint.json
+
+# Logs
+*.log
+slurm_logs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Blender installation
+datagen/question_generation/blender-*/
+
+# Datagen outputs
+datagen/data/
