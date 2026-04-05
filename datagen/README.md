@@ -99,7 +99,7 @@ The 3D indoor scenes used as input to this pipeline are generated using a modifi
 
 To generate scenes:
 
-1. **Set up Infinigen** by following the installation instructions in the [Infinigen repository](https://github.com/princeton-vl/infinigen).
+1. **Set up Infinigen** by following the installation instructions in the [cosmic branch](https://github.com/ankursikarwar/infinigen/tree/cosmic).
 2. **Run the scene generation scripts** provided in the `cosmic` branch root — one script per room type:
 
 ```bash
@@ -110,7 +110,7 @@ sbatch bathroom.sh
 bash bathroom.sh
 ```
 
-Available scripts: `bathroom.sh`, `bedroom.sh`, `diningroom.sh`, `kitchen.sh`, `livingroom.sh`. Each script generates scenes of the corresponding room type and saves them under `outputs/<RoomType>/`. Once generated, point `--base_dir` in the pipeline to the output directory.
+Available scripts: [bathroom.sh](https://github.com/ankursikarwar/infinigen/blob/cosmic/bathroom.sh), [bedroom.sh](https://github.com/ankursikarwar/infinigen/blob/cosmic/bedroom.sh), [diningroom.sh](https://github.com/ankursikarwar/infinigen/blob/cosmic/diningroom.sh), [kitchen.sh](https://github.com/ankursikarwar/infinigen/blob/cosmic/kitchen.sh), [livingroom.sh](https://github.com/ankursikarwar/infinigen/blob/cosmic/livingroom.sh). Each script generates scenes of the corresponding room type and saves them under `outputs/<RoomType>/`. Once generated, point `--base_dir` in the pipeline to the output directory.
 
 ### Blender
 
