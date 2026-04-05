@@ -95,7 +95,22 @@ The pipeline runs the following stages in sequence. Each stage is optional and c
 
 ### Scene Generation
 
-The 3D indoor scenes used as input to this pipeline are generated using a modified version of Infinigen, available at [ankursikarwar/infinigen (cosmic branch)](https://github.com/ankursikarwar/infinigen/tree/cosmic). Refer to that repository for instructions on generating scenes.
+The 3D indoor scenes used as input to this pipeline are generated using a modified version of [Infinigen](https://github.com/princeton-vl/infinigen), available at [ankursikarwar/infinigen (cosmic branch)](https://github.com/ankursikarwar/infinigen/tree/cosmic).
+
+To generate scenes:
+
+1. **Set up Infinigen** by following the installation instructions in the [Infinigen repository](https://github.com/princeton-vl/infinigen).
+2. **Run the scene generation scripts** provided in the `cosmic` branch root — one script per room type:
+
+```bash
+# Example: generate bathroom scenes
+sbatch bathroom.sh
+
+# Or run directly without SLURM
+bash bathroom.sh
+```
+
+Available scripts: `bathroom.sh`, `bedroom.sh`, `diningroom.sh`, `kitchen.sh`, `livingroom.sh`. Each script generates scenes of the corresponding room type and saves them under `outputs/<RoomType>/`. Once generated, point `--base_dir` in the pipeline to the output directory.
 
 ### Blender
 

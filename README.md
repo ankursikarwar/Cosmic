@@ -284,6 +284,6 @@ This project is released under the [MIT License](LICENSE).
  
 ## Acknowledgements
  
-Scene generation builds on [Infinigen](https://github.com/princeton-vl/infinigen). We thank the participants of our human study for their contributions to COSMIC-HUMAN.
+Scene generation builds on [Infinigen](https://github.com/princeton-vl/infinigen) (BSD 3-Clause License, Copyright © 2023 Princeton University). We thank the Infinigen authors for their excellent work. We also thank the participants of our human study for their contributions to COSMIC-HUMAN.
 
 </div>
