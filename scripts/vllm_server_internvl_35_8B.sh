@@ -12,7 +12,7 @@
 # Load required modules
 module load cuda/12.2.2
 module load anaconda/3
-conda activate vllm_new
+conda activate cosmic
 
 # Load environment variables
 ENV_FILE="$(dirname "$0")/../.env"
