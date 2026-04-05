@@ -99,7 +99,7 @@ The 3D indoor scenes used as input to this pipeline are generated using a modifi
 
 To generate scenes:
 
-1. **Set up Infinigen** by following the installation instructions in the [cosmic branch](https://github.com/ankursikarwar/infinigen/tree/cosmic).
+1. **Set up Infinigen-COSMIC** by following the installation instructions in our [custom Infinigen branch](https://github.com/ankursikarwar/infinigen/tree/cosmic), which can be used for generating COSMIC-style indoor scenes.
 2. **Run the scene generation scripts** provided in the `cosmic` branch root — one script per room type:
 
 ```bash
