@@ -256,6 +256,11 @@ python main.py \
 | `--reasoning_effort` | `high` | Reasoning effort for GPT and Gemini models (`low`, `medium`, `high`, `minimal`, `none`) |
 
  
+## Data Generation
+
+For instructions on generating the COSMIC benchmark dataset, see [datagen/README.md](datagen/README.md).
+
+ 
 ## Citation
  
 If you use COSMIC in your research, please cite:
