@@ -93,6 +93,10 @@ The pipeline runs the following stages in sequence. Each stage is optional and c
 
 ## Setup
 
+### Scene Generation
+
+The 3D indoor scenes used as input to this pipeline are generated using a modified version of Infinigen, available at [ankursikarwar/infinigen-cosmic](https://github.com/ankursikarwar/infinigen-cosmic). Refer to that repository for instructions on generating scenes.
+
 ### Blender
 
 Several stages (`scene_object_info`, `scene_camera_info`, `scene_blender_color_info`) require Blender. The pipeline looks for a local Blender installation first, then falls back to the system `blender` command.
