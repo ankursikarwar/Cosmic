@@ -16,7 +16,6 @@ The pipeline processes indoor 3D scenes through a sequence of stages to produce 
 ```
 datagen/
 ├── pipeline.py                        # Main pipeline script
-├── scene_filtering.py                 # LLM-based scene quality filtering
 ├── data/                              # Output directory (auto-created)
 │   ├── dataset_scenes.json            # Registry of all processed scenes
 │   ├── dataset_global_counting.json
@@ -163,7 +162,7 @@ Then pass:
 
 ### API Keys
 
-Set `OPENAI_API_KEY` in your `.env` file (at the project root). This is used by the scene filtering, color detection, and paraphrasing stages which default to OpenAI models.
+Set `OPENAI_API_KEY` in your `.env` file (at the project root). This is used by the color detection and paraphrasing stages which default to OpenAI models.
 
 ---
 
@@ -231,7 +230,7 @@ python -m datagen.pipeline \
 
 ### Model arguments
 
-Each of the three model-backed stages (scene filtering, color detection, paraphrasing) has its own client/model/api_base arguments:
+Each of the three model-backed stages (visible object detection, color detection, paraphrasing) has its own client/model/api_base arguments:
 
 | Argument | Default | Stage |
 |---|---|---|
