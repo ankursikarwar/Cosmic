@@ -108,19 +108,39 @@ rm blender-4.5.3-linux-x64.tar.xz
 
 The pipeline will automatically use `datagen/question_generation/blender-4.5.3-linux-x64/blender` if it exists.
 
-### vLLM Server (for `scene_llm_visible_objects`)
+### VLM for `scene_llm_visible_objects`
 
-The visible object detection stage requires a running VLM via vLLM. Launch one before running the pipeline:
+The visible object detection stage can use either an OpenAI model or an open-source model via vLLM.
+
+**Option 1 — OpenAI model (default):**
 
 ```bash
-vllm serve Qwen/Qwen2.5-VL-3B-Instruct \
+--client_vis_objects openai \
+--model_name_vis_objects gpt-4o-mini \
+--api_base_vis_objects https://api.openai.com/v1
+```
+
+Requires `OPENAI_API_KEY` set in `.env`.
+
+**Option 2 — Open-source model via vLLM:**
+
+First launch a vLLM server:
+
+```bash
+vllm serve Qwen/Qwen2.5-VL-72B-Instruct \
     --port 4877 --host 0.0.0.0 \
-    --tensor-parallel-size 1 \
+    --tensor-parallel-size 4 \
     --gpu-memory-utilization 0.90 \
     --trust-remote-code
 ```
 
-Set `--api_base_vis_objects` to the server address (e.g. `http://<hostname>:4877/v1`).
+Then pass:
+
+```bash
+--client_vis_objects vllm \
+--model_name_vis_objects Qwen/Qwen2.5-VL-72B-Instruct \
+--api_base_vis_objects http://<hostname>:4877/v1
+```
 
 ### API Keys
 
