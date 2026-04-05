@@ -15,7 +15,6 @@ import wandb
 from dotenv import load_dotenv
 load_dotenv()
 
-from datagen.scene_filtering import filter_scenes
 from datagen.question_generation.llm_visible_objects import run_visibility_check
 from datagen.question_generation.get_color_info import run_color_detection
 from datagen.question_generation.paraphrase_questions import paraphrase_across_scenes
@@ -44,9 +43,6 @@ class DatagenPipeline:
         max_scenes: int = None,
         seed: int = 42,
         overwrite_files: bool = False,
-        client_scene_filtering: str = "openai",
-        model_name_scene_filtering: str = "gpt-4.1-mini",
-        api_base_scene_filtering: str = "https://api.openai.com/v1",
         client_color: str = "openai",
         model_name_color: str = "gpt-4.1-mini",
         api_base_color: str = "https://api.openai.com/v1",
@@ -66,9 +62,6 @@ class DatagenPipeline:
         self.stages_to_run = stages_to_run
         self.max_scenes = max_scenes
         self.seed = seed
-        self.client_scene_filtering = client_scene_filtering
-        self.model_name_scene_filtering = model_name_scene_filtering
-        self.api_base_scene_filtering = api_base_scene_filtering
         self.client_color = client_color
         self.model_name_color = model_name_color
         self.api_base_color = api_base_color
@@ -98,8 +91,6 @@ class DatagenPipeline:
         self.processed_scenes = 0
         self.failed_scenes = {}
         self.successful_scenes = []
-        self.accepted_scenes = 0
-        self.rejected_scenes = 0
 
         self.script_dir = Path(__file__).parent
         self.question_generation_dir = Path(__file__).parent / "question_generation"
@@ -269,43 +260,6 @@ class DatagenPipeline:
         except Exception as e:
             logger.error(f"✗ {description} failed with exception: {e}")
             return False
-
-    def scene_filtering(self, scenes: List[Path], log_wandb: bool) -> List[Path]:
-        filtered_scenes = filter_scenes(
-            scenes,
-            client=self.client_scene_filtering,
-            model_name=self.model_name_scene_filtering,
-            api_base=self.api_base_scene_filtering,
-            api_key=self.api_key,
-            )
-        logger.info(f"Filtered {len(filtered_scenes)} scenes")
-        logger.info(f"Accepted {len(scenes) - len(filtered_scenes)} scenes")
-        logger.info(f"Writing filter results to file")
-
-        self.accepted_scenes = len(scenes) - len(filtered_scenes)
-        self.rejected_scenes = len(filtered_scenes)
-
-        filter_results = {}
-        if log_wandb:
-            for scene in scenes:
-                filter_results[str(scene)] = {
-                    "result": "REJECT" if scene in filtered_scenes else "ACCEPT",
-                    "reason": open(os.path.join(scene, "REJECT.txt" if scene in filtered_scenes else "ACCEPT.txt")).read()
-                }
-
-                if str(scene) in self.wandb_dict.keys():
-                    self.wandb_dict[str(scene)]["scene_filter_result"] = "REJECT" if scene in filtered_scenes else "ACCEPT"
-                    self.wandb_dict[str(scene)]["scene_filter_reason"] = open(os.path.join(scene, "REJECT.txt" if scene in filtered_scenes else "ACCEPT.txt")).read()
-                else:
-                    self.wandb_dict[str(scene)] = {
-                        "scene_filter_result": "REJECT" if scene in filtered_scenes else "ACCEPT",
-                        "scene_filter_reason": open(os.path.join(scene, "REJECT.txt" if scene in filtered_scenes else "ACCEPT.txt")).read()
-                    }
-
-        with open(f"metadata/scene_filtering_{time.strftime('%Y%m%d_%H%M%S')}.json", "w") as f:
-            json.dump(filter_results, f, indent=4)
-
-        return filtered_scenes
 
     def scene_object_info(self, scenes: List[Path], log_wandb: bool):
         for scene in tqdm(scenes, desc="Getting object information"):
@@ -1293,7 +1247,6 @@ class DatagenPipeline:
         elif self.max_scenes:
             logger.info(f"Processing all {len(scenes)} scenes (max_scenes >= total scenes)")
 
-        scene_filtering_total_time = 0
         scene_object_info_total_time = 0
         scene_camera_info_total_time = 0
         scene_blender_color_info_total_time = 0
@@ -1328,12 +1281,6 @@ class DatagenPipeline:
                     "coarse_log": coarse_log,
                 }
 
-
-        if "scene_filtering" in self.stages_to_run:
-            scene_filtering_start_time = time.time()
-            filtered_scenes = self.scene_filtering(scenes, log_wandb=self.log_wandb)
-            scene_filtering_total_time = time.time() - scene_filtering_start_time
-            logger.info(f"Scene filtering took {scene_filtering_total_time:.2f} seconds")
 
         if "scene_object_info" in self.stages_to_run:
             scene_object_info_start_time = time.time()
@@ -1427,7 +1374,6 @@ class DatagenPipeline:
             wandb.init(name=run_name, project="Cosmic_Datagen", entity="collaborative-spatial-intelligence")
             table = wandb.Table(columns=[
                 "Scene_Image_0", "Scene_Image_1", "Questions", "Map_Questions", "Questions_Paraphrase",
-                "Scene_Filter_Result", "Scene_Filter_Reason",
                 "Bound_Objects_Camera_0", "Bound_Objects_Camera_1",
                 "Blender_Visible_Objects",
                 "LLM_Visible_Objects",
@@ -1448,8 +1394,6 @@ class DatagenPipeline:
                 "bedroom": 0,
                 "bathroom": 0,
                 "total_scenes": 0,
-                "accepted_scenes": self.accepted_scenes,
-                "rejected_scenes": self.rejected_scenes
             }
 
 
@@ -1458,8 +1402,6 @@ class DatagenPipeline:
                     scene_path = str(scene)
                     scene_image_0 = data["scene_image_0"] if "scene_image_0" in data.keys() else None
                     scene_image_1 = data["scene_image_1"] if "scene_image_1" in data.keys() else None
-                    scene_filter_result = data["scene_filter_result"] if "scene_filter_result" in data.keys() else None
-                    scene_filter_reason = data["scene_filter_reason"] if "scene_filter_reason" in data.keys() else None
                     blender_visible_objects = data["blender_visible_objects"] if "blender_visible_objects" in data.keys() else None
                     blender_cameras = data["blender_cameras"] if "blender_cameras" in data.keys() else None
                     blender_colors = data["blender_colors"] if "blender_colors" in data.keys() else None
@@ -1568,8 +1510,6 @@ class DatagenPipeline:
                         questions,
                         cognitive_mapping_display,
                         questions_paraphrase,
-                        scene_filter_result,
-                        scene_filter_reason,
                         bound_objects_camera_0_img,
                         bound_objects_camera_1_img,
                         blender_visible_objects,
@@ -1688,7 +1628,6 @@ class DatagenPipeline:
             wandb.log({"Successful Scenes": len(self.successful_scenes)})
             wandb.log({"Failed Scenes": len(self.failed_scenes)})
             wandb.log({"Total Execution Time": time.time() - start_time})
-            wandb.log({"Scene Filtering Time": scene_filtering_total_time})
             wandb.log({"Scene Object Info Time": scene_object_info_total_time})
             wandb.log({"Scene Camera Info Time": scene_camera_info_total_time})
             wandb.log({"Scene Blender Color Info Time": scene_blender_color_info_total_time})
@@ -1741,8 +1680,6 @@ class DatagenPipeline:
                 ["Bathrooms", scene_stats["bathroom"]],
                 ["Dining Rooms", scene_stats["dining"]],
                 ["Total Scenes", scene_stats["total_scenes"]],
-                ["Accepted Scenes", scene_stats["accepted_scenes"]],
-                ["Rejected Scenes", scene_stats["rejected_scenes"]],
             ]
             scene_stats_table = wandb.Table(data=scene_stats_data, columns=["Scene_Type", "Number_of_Scenes"])
             wandb.log({"Scene Stats":
@@ -1755,7 +1692,6 @@ class DatagenPipeline:
 
         self.print_summary(
             start_time,
-            scene_filtering_total_time,
             scene_object_info_total_time,
             scene_camera_info_total_time,
             scene_blender_color_info_total_time,
@@ -1774,7 +1710,6 @@ class DatagenPipeline:
     def print_summary(
         self,
         start_time: float,
-        scene_filtering_total_time: float,
         scene_object_info_total_time: float,
         scene_camera_info_total_time: float,
         scene_blender_color_info_total_time: float,
@@ -1800,7 +1735,6 @@ class DatagenPipeline:
         logger.info(f"Failed scenes: {len(self.failed_scenes)}")
         logger.info(f"Total execution time: {duration:.2f} seconds")
         logger.info(f"Average time per scene: {duration/max(1, self.processed_scenes):.2f} seconds")
-        logger.info(f"Scene Filtering Time: {scene_filtering_total_time:.2f} seconds")
         logger.info(f"Scene Object Info Time: {scene_object_info_total_time:.2f} seconds")
         logger.info(f"Scene Camera Info Time: {scene_camera_info_total_time:.2f} seconds")
         logger.info(f"Scene Blender Color Info Time: {scene_blender_color_info_total_time:.2f} seconds")
@@ -1856,24 +1790,6 @@ def main():
         type=int,
         default=42,
         help="Random seed for reproducibility"
-    )
-    parser.add_argument(
-        "--client_scene_filtering",
-        type=str,
-        default="openai",
-        help="Client name"
-    )
-    parser.add_argument(
-        "--model_name_scene_filtering",
-        type=str,
-        default="gpt-4o-mini",
-        help="Model name"
-    )
-    parser.add_argument(
-        "--api_base_scene_filtering",
-        type=str,
-        default="https://api.openai.com/v1",
-        help="API base"
     )
     parser.add_argument(
         "--client_color",
@@ -1956,9 +1872,6 @@ def main():
         stages_to_run=args.stages_to_run,
         max_scenes=args.max_scenes,
         seed=args.seed,
-        client_scene_filtering=args.client_scene_filtering,
-        model_name_scene_filtering=args.model_name_scene_filtering,
-        api_base_scene_filtering=args.api_base_scene_filtering,
         client_color=args.client_color,
         model_name_color=args.model_name_color,
         api_base_color=args.api_base_color,
