@@ -3,7 +3,7 @@ openai==1.106.1
 wandb==0.21.1
 tenacity==9.1.2
 tqdm==4.67.1
-Pillow==10.0.1
+Pillow
 pyarrow==23.0.1
 requests==2.32.4
 huggingface-hub==0.35.3
